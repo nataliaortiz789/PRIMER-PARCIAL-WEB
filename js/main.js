@@ -10,20 +10,24 @@ $("#selh3").click(function (event) {
   $("#contenedor").load("selecciones/colombia.html");
 });
 
-var part = "";
-$.getJSON("../json/partidos.json", function (datos) {
-  $("#contenido").html("");
-  $.each(datos["partidos"], function (idx, partido) {
-    $("#contenido").append(
-      "<tr>" +
-        "<td>" +
-        partido["fecha"] +
-        "</td><td>" +
-        partido["equipo1"] +
-        "</td><td>" +
-        partido.equipo2 +
-        "</td>" +
-        "</tr>"
-    );
-  });
-});
+const tabla = document.querySelector('#lista-usuarios tbody');
+function cargarUsuarios() {
+  fetch("usuarios.json")
+    .then((respuesta) => respuesta.json()) 
+    .then((usuarios) => {
+      usuarios.forEach((usuario) => {
+        const row = document.createElement("tr");
+        row.innerHTML += `
+                    <td>${usuario.id}</td>
+                    <td>${usuario.name}</td>
+                    <td>${usuario.email}</td>
+                    <td>${usuario.company.name}</td>
+                `;
+        tabla.appendChild(row);
+      });
+    }) // Aquí mostramos dicha información
+    .catch((error) => console.log("Hubo un error : " + error.message));
+}
+
+cargarUsuarios();
+
